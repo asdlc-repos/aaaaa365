@@ -1,0 +1,23 @@
+{
+  "overview": "A minimal single-component web application that serves a static \"Hello World\" page to any visitor. The architecture consists of just one frontend web-app component with no backend dependencies.",
+  "requirements": [
+    "Display 'Hello World' message on the main page",
+    "Accessible via any modern web browser",
+    "Expose a /health endpoint for liveness checks",
+    "Serve over HTTP on standard web port"
+  ],
+  "components": [
+    {
+      "name": "hello-web",
+      "componentType": "web-app",
+      "language": "TypeScript / React (Vite) served by nginx",
+      "dependsOn": [],
+      "entrypoint": "deployment/web-application",
+      "buildpack": "docker",
+      "appPath": "/hello-web",
+      "openAPISpec": "openapi: 3.0.3\ninfo:\n  title: Hello Web\n  version: 1.0.0\n  description: Static web app displaying Hello World\npaths:\n  /:\n    get:\n      summary: Serve the Hello World page\n      responses:\n        '200':\n          description: HTML page\n          content:\n            text/html:\n              schema:\n                type: string\n  /health:\n    get:\n      summary: Health check\n      responses:\n        '200':\n          description: Healthy\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  status:\n                    type: string\n",
+      "componentAgentInstructions": "Create a minimal React + TypeScript app using Vite. The root page (/) should render a centered heading that says 'Hello World'. Build the static assets (npm run build) and serve them with nginx in the Docker image. Listen on port 80. Add an nginx location /health that returns 200 with JSON {\"status\":\"ok\"} and Content-Type application/json. Include a multi-stage Dockerfile: stage 1 node:20-alpine to build, stage 2 nginx:alpine to serve /usr/share/nginx/html. No backend or API calls required."
+    }
+  ],
+  "sourceSpec": "spec-v1"
+}
